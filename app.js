@@ -15,6 +15,12 @@ function loadEventListeners() {
 
     // remove task event
     taskList.addEventListener('click', removeTask);
+
+    // clear task event
+    clearBtn.addEventListener('click', clearTasks);
+
+    // filter tasks event
+    filter.addEventListener('keyup', filterTasks);
 }
  
 // Add Task
@@ -50,7 +56,7 @@ function addTask(e) {
 
 // Remove Task
 function removeTask(e) { 
-    
+
     if (e.target.parentElement.classList.contains('delete-item')) {
         // confirm if user wants to delete
         if (confirm('Are You Sure?')) {
@@ -58,4 +64,37 @@ function removeTask(e) {
             e.target.parentElement.parentElement.remove();
         }
     }
+}
+ 
+// Clear Tasks
+function clearTasks() { 
+    // taskList.innerHTML = ''; // one way
+
+    // faster way
+    // while there is a first child (still something in the list)
+    while (taskList.firstChild) {
+        // delete
+        taskList.removeChild(taskList.firstChild);
+    }
+}
+ 
+// Filter Tasks
+function filterTasks(e) { 
+    // get the text that is typed in the input field and convert to lowercase so we can match it to the tasks
+    const text = e.target.value.toLowerCase();
+
+    // querySelectorAll returns a node list
+    document.querySelectorAll('.collection-item').forEach(
+        function(task) {
+            const item = task.firstChild.textContent;
+            // if theres no match
+            if (item.toLowerCase().indexOf(text) != -1) {
+                // show the task
+                task.style.display = 'block';
+            } else {
+                // hide the task
+                task.style.display = 'none';
+            }
+        }
+    );
  }
